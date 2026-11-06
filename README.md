@@ -5,7 +5,7 @@ playbook (RAG), then drafts a win-back email and a CRM task for human approval.
 
 ## Structure
 ```
-churn_agent_rag/
+Churn Retention Agent/
 ├── data/                 customers.csv, usage.csv, support_tickets.jsonl (generated)
 ├── knowledge_base/       retention_playbook.md  <- indexed by the RAG layer
 ├── src/
