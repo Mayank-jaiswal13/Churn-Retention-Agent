@@ -6,7 +6,10 @@ playbook (RAG), then drafts a win-back email and a CRM task for human approval.
 ## Structure
 ```
 Churn Retention Agent/
-├── data/                 customers.csv, usage.csv, support_tickets.jsonl (generated)
+├── app.py               Streamlit customer-retention dashboard
+├── customers.csv         synthetic customer table
+├── usage.csv             synthetic usage metrics
+├── support_tickets.jsonl synthetic support messages
 ├── knowledge_base/       retention_playbook.md  <- indexed by the RAG layer
 ├── src/
 │   ├── generate_data.py  synthetic data (replace with your real CSVs)
@@ -23,9 +26,19 @@ Churn Retention Agent/
 ## Run
 ```bash
 pip install -r requirements.txt
+streamlit run app.py
+```
+
+The dashboard lets you choose a customer, see the demo churn estimate and
+drivers, review support messages and playbook guidance, then save an email
+draft and a CRM task for human review. It never sends email automatically.
+
+To use the command-line agent instead:
+
+```bash
 python src/generate_data.py
 python src/train.py
-python src/agent.py CUST_0007            # offline mode, no key needed
+python src/agent.py CUST_0007
 ```
 
 To enable the LLM agent, set the key in your shell first:
@@ -61,6 +74,13 @@ estimates compare the model prediction with one feature replaced at a time by
 the population median or mode. They explain model behavior approximately and
 do not establish causal reasons for an individual customer's risk.
 
+## Deploy
+
+This repository is ready for Streamlit Community Cloud: create an app from
+`Mayank-jaiswal13/Churn-Retention-Agent`, choose the `main` branch, and set the
+entrypoint to `app.py`. The app runs without an Anthropic API key because the
+dashboard uses the project's local model and deterministic tools.
+
 The email tool validates the customer ID against the loaded customer table,
 confines draft filenames to `output/drafts`, and rejects percentage offers
 above 20% in either the subject or body. Discount offers without an explicit
@@ -71,4 +91,3 @@ percentage are sent for manager review by being rejected.
 - Add an LLM sentiment score on tickets as a model feature.
 - Add a Reviewer agent, evals (LLM-as-judge), and an A/B retention outcome loop.
 - Use your own data: keep column names or edit `features.py`.
-

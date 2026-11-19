@@ -12,6 +12,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 ROOT = Path(__file__).resolve().parent.parent
+DATA = ROOT / "data"
+if not DATA.exists() and (ROOT / "support_tickets.jsonl").exists():
+    DATA = ROOT
 
 
 class Retriever:
@@ -36,7 +39,7 @@ class Retriever:
 
     @staticmethod
     def _load_tickets():
-        path = ROOT / "data" / "support_tickets.jsonl"
+        path = DATA / "support_tickets.jsonl"
         if not path.exists():
             return []
         return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]

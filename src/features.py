@@ -4,6 +4,9 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
+if not DATA.exists() and (ROOT / "customers.csv").exists():
+    # Also support repositories that keep the generated data files at the root.
+    DATA = ROOT
 
 NUMERIC = ["tenure_months", "monthly_charges", "avg_logins_per_week",
            "feature_adoption", "support_tickets_30d", "late_payments_6m"]
